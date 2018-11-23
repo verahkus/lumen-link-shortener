@@ -12,5 +12,9 @@
 */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return config('app.version');
 });
+
+$router->get('short-link', [
+    'as' => 'short-link', 'uses' => 'LinkController@shortLink'
+]);
