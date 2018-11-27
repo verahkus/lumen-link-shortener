@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\LogEvent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Validator;
 use App\Rules\UrlRule;
 use App\Model\Link;
@@ -19,6 +21,7 @@ class LinkController extends Controller
         ]);
 
         if ($validator->fails()) {
+            Event::fire(new LogEvent(trans('app.validator_fails'),$request->input('link'),$request->server));
             return response()->json($validator->messages(), 400);
         }
 
@@ -28,6 +31,7 @@ class LinkController extends Controller
         $link->key = $this->encodeId($link->id);
         $link->save();
 
+        Event::fire(new LogEvent(trans('app.response_link'),$request->input('link'),$request->server));
         return response()->json(['link' => self::getUrlLink($link->key)], 200);
     }
 
