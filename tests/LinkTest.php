@@ -36,7 +36,7 @@ class LinkTest extends TestCase
         $link = factory(Link::class)->create([
             'url' => $testLink,
         ]);
-        $response = $this->json('GET', '/short_link', ['link' => $testLink])
+        $response = $this->json('POST', '/short_link', ['link' => $testLink])
             ->seeJson([
                 'link' => config('app.site_url').$link->key,
             ])
@@ -49,7 +49,7 @@ class LinkTest extends TestCase
     public function testShortLinkJson()
     {
         $testLink = $this->generateUrl();
-        $this->json('GET', '/short_link', ['link' => $testLink])->seeStatusCode(200);
+        $this->json('POST', '/short_link', ['link' => $testLink])->seeStatusCode(200);
         $this->seeInDatabase('links', ['url' => $testLink]);
     }
 
@@ -58,9 +58,21 @@ class LinkTest extends TestCase
      */
     public function testShortLinkJsonValidateRequiredLink()
     {
-        $this->json('GET', '/short_link')
+        $this->json('POST', '/short_link')
             ->seeJson([
                 'link' => ['validation.required'],
+            ])
+            ->seeStatusCode(400);
+    }
+
+    /**
+     * проверка валидации (корректности) новой ссылки через api
+     */
+    public function testShortLinkJsonValidateCorrectnessLink()
+    {
+        $this->json('POST', '/short_link', ['link' => str_random(10)])
+            ->seeJson([
+                'link' => ['validation.correctness'],
             ])
             ->seeStatusCode(400);
     }
