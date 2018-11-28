@@ -17,7 +17,7 @@ class LinkController extends Controller
     public function shortLink(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'link' => 'required', new UrlRule($request->input('link'))
+            'link' => 'required|correctness'
         ]);
 
         if ($validator->fails()) {
@@ -36,7 +36,7 @@ class LinkController extends Controller
     }
 
     protected function getUrlLink($key) {
-        return config('app.site_url').'/'.$key;
+        return config('app.site_url').$key;
     }
 
     protected function encodeId($id)
