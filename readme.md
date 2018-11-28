@@ -5,6 +5,10 @@
 * app.validator_fails
 * app.response_link
 
+validation.required
+validation.correctness
+
+
 ## Official Documentation
 
 Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
