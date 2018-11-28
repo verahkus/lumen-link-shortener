@@ -2,7 +2,8 @@ image: clockwise/docker-phpunit-alpain:master
 pipelines:
   default:
     - step:
-        name: Build
+        deployment: test
+        name: Build and test
         caches:
           - composer
         script:
@@ -12,8 +13,4 @@ pipelines:
           - cp .env.example .env
           - touch database/database.sqlite
           - php artisan migrate --seed
-    - step:
-        name: test phpunit
-        script:
-          # run tests
           - vendor/bin/phpunit
