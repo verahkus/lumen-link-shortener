@@ -11,7 +11,6 @@ pipelines:
           - vendor/bin/phpunit --version
           # generate key
           - cp .env.example .env
-          - php artisan key:generate
           - touch database/database.sqlite
           # do not migrate - it's happens in test environment setup
           - php artisan migrate --seed
