@@ -14,6 +14,43 @@ class LinkController extends Controller
 {
     protected $link;
 
+    /**
+     * @OA\Post(
+     *   path="/short_link",
+     *   summary="Сокращение ссылки",
+     *   operationId="shortLink",
+     * @OA\Parameter(
+     *    in="query",
+     *    name="link",
+     *    required=true,
+     *    @OA\Schema(type="string"),
+     *    example="http://127.0.0.1/test",
+     *    description="ссылка для сокращения",
+     * ),
+     * @OA\Response(
+     *     response=200,
+     *     description="Ссылка сделана",
+     *     @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="link",
+     *                  type="string",
+     *                  description="сокращенная ссылка"
+     *              )
+     *         )
+     *     ),
+     * ),
+     * @OA\Response(
+     *     response="400",
+     *     description="validation.required или validation.correctness"
+     * )
+     * )
+     *
+     * сокращение ссылки
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function shortLink(Request $request)
     {
         $validator = Validator::make($request->all(), [

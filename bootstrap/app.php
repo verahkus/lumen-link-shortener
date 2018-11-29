@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Routing\ResponseFactory;
+
 require_once __DIR__.'/../vendor/autoload.php';
 
 try {
@@ -23,10 +25,15 @@ $app = new Laravel\Lumen\Application(
     realpath(__DIR__.'/../')
 );
 
+$app->instance('path.storage', app()->basePath() . DIRECTORY_SEPARATOR . 'storage');
+$app->instance('path.config', app()->basePath() . DIRECTORY_SEPARATOR . 'config');
+
 $app->withFacades();
 $app->withEloquent();
 
 $app->configure('app');
+$app->configure('swagger-lume');
+
 /*
 |--------------------------------------------------------------------------
 | Register Container Bindings
@@ -47,6 +54,11 @@ $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
     App\Console\Kernel::class
 );
+
+//$app->singleton('Illuminate\Contracts\Routing\ResponseFactory', function ($app)
+//{
+//    return new ResponseFactory($app['Illuminate\Contracts\View\Factory'], $app['Illuminate\Routing\Redirector']);
+//});
 
 /*
 |--------------------------------------------------------------------------
@@ -84,6 +96,7 @@ $app->singleton(
 
 if ($app->environment() !== 'production') {
     $app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+    $app->register(\SwaggerLume\ServiceProvider::class);
 }
 
 /*
