@@ -27,7 +27,7 @@ class LinkController extends Controller
      *    required=true,
      *    @OA\Schema(type="string"),
      *    example="http://127.0.0.1/test",
-     *    description="ссылка для сокращения",
+     *    description="Ссылка для сокращения",
      * ),
      * @OA\Response(
      *     response=200,
@@ -38,14 +38,14 @@ class LinkController extends Controller
      *              @OA\Property(
      *                  property="link",
      *                  type="string",
-     *                  description="сокращенная ссылка"
+     *                  description="Сокращенная ссылка"
      *              )
      *         )
      *     ),
      * ),
      * @OA\Response(
      *     response="400",
-     *     description="validation.required или validation.correctness"
+     *     description="Ошибка валидации - validation.required или validation.correctness"
      * )
      * )
      *
@@ -80,6 +80,43 @@ class LinkController extends Controller
 
     /**
      * получение ссылки по сокращенной ссылке
+     *
+     * @OA\Post(
+     *   path="/get_link",
+     *   summary="Получение оригинальной ссылки",
+     *   operationId="getLink",
+     * @OA\Parameter(
+     *    in="query",
+     *    name="link",
+     *    required=true,
+     *    @OA\Schema(type="string"),
+     *    example="http://127.0.0.1/Mg",
+     *    description="Сокращенная ссылка",
+     * ),
+     * @OA\Response(
+     *     response=200,
+     *     description="Ссылка существует. Ответ оригинальной ссылки.",
+     *     @OA\MediaType(
+     *          mediaType="application/json",
+     *          @OA\Schema(
+     *              @OA\Property(
+     *                  property="link",
+     *                  type="string",
+     *                  description="Оригинальная ссылка"
+     *              )
+     *         )
+     *     ),
+     * ),
+     * @OA\Response(
+     *     response="400",
+     *     description="Ошибка валидации - validation.required или validation.correctness или validation.base64key"
+     * ),
+     * @OA\Response(
+     *     response="404",
+     *     description="Ссылка не существует - validation.not_found"
+     * )
+     * )
+     *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
