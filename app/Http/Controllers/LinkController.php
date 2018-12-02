@@ -12,6 +12,7 @@ use App\Model\Link;
 class LinkController extends Controller
 {
     protected $link;
+    protected $result_link;
 
     /**
      * сокращение ссылки
@@ -56,13 +57,16 @@ class LinkController extends Controller
         $validator = $this->validatorShortLink($request);
 
         if ($validator->fails()) {
-            Event::fire(new LogEvent(trans('app.validator_fails'),$request->input('link'),$request->server));
+            //логирование
+            Event::fire(new LogEvent(trans('app.validator_shortLink_fails'),$request->input('link'),$request->server));
             return response()->json($validator->messages(), 400);
         }
 
         $this->link = $request->input('link');
 
-        $link = Link::firstOrCreate(['url' => $this->link]);
+        $link = Link::firstOrCreate([
+            'url' => preg_replace("#/$#", "", $this->link)
+        ]);
         $link->key = $this->encodeId($link->id);
         $link->save();
 
@@ -70,8 +74,40 @@ class LinkController extends Controller
         dispatch(new StatLinkJob($link,0));
 
         //логирование
-        Event::fire(new LogEvent(trans('app.response_link'),$request->input('link'),$request->server));
+        Event::fire(new LogEvent(trans('app.response_shortLink'),$request->input('link'),$request->server));
         return response()->json(['link' => self::getUrlLink($link->key)], 200);
+    }
+
+    /**
+     * получение ссылки по сокращенной ссылке
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getLink(Request $request)
+    {
+        $validator = $this->validatorGetLink($request);
+
+        if ($validator->fails()) {
+            //логирование
+            Event::fire(new LogEvent(trans('app.validator_getLink_fails'),$request->input('link'),$request->server));
+            return response()->json($validator->messages(), 400);
+        }
+
+        $this->link = $request->input('link');
+        $this->result_link = Link::find($this->getIdLink());
+
+        if ($this->result_link) {
+            //статистика
+            dispatch(new StatLinkJob($this->result_link,1));
+
+            //логирование
+            Event::fire(new LogEvent(trans('app.response_getLink'),$request->input('link'),$request->server));
+            return response()->json(['link' => $this->result_link->url], 200);
+        } else {
+            //логирование
+            Event::fire(new LogEvent(trans('app.response_getLink_notFound'),$request->input('link'),$request->server));
+            return response()->json(['link' => array('validator.not_found')], 404);
+        }
     }
 
     protected function validatorShortLink($request)
@@ -79,6 +115,17 @@ class LinkController extends Controller
         return Validator::make($request->all(), [
             'link' => 'required|correctness'
         ]);
+    }
+
+    protected function validatorGetLink($request)
+    {
+        return Validator::make($request->all(), [
+            'link' => 'required|correctness|base64key'
+        ]);
+    }
+
+    protected function getIdLink() {
+        return base64_decode(str_replace(config('app.site_url'),"",$this->link),true);
     }
 
     protected function getUrlLink($key) {

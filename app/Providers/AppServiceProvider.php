@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Rules\UrlBase64KeyRule;
 use App\Rules\UrlRule;
 use Illuminate\Support\ServiceProvider;
 
@@ -19,5 +20,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot() {
         UrlRule::validate();
+        UrlBase64KeyRule::validate();
     }
 }

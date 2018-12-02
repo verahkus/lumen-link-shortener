@@ -1,22 +1,13 @@
 # Link shortener
 
+**Validation**
+* validation.required
+* validation.correctness
+* validation.base64key
+* validation.not_found
 
-
-* app.validator_fails
-* app.response_link
-
-validation.required
-validation.correctness
-
-
-## Official Documentation
-
-Documentation for the framework can be found on the [Lumen website](http://lumen.laravel.com/docs).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Lumen, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Lumen framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT)
+**Log submit**
+* app.validator_shortLink_fails
+* app.validator_getLink_fails
+* app.response_shortLink
+* app.response_getLink
