@@ -27,10 +27,6 @@ class LogListener implements ShouldQueue
      */
     public function handle(LogEvent $event)
     {
-        Log::info([
-            $event->title,
-            $event->link,
-            $event->request
-        ]);
+        (config('app.log_write'))? Log::info([$event->title,$event->link,$event->request]): false;
     }
 }

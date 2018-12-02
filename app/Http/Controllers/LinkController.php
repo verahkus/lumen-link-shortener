@@ -7,9 +7,7 @@ use App\Jobs\StatLinkJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Validator;
-use App\Rules\UrlRule;
 use App\Model\Link;
-
 
 class LinkController extends Controller
 {
@@ -55,9 +53,7 @@ class LinkController extends Controller
      */
     public function shortLink(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'link' => 'required|correctness'
-        ]);
+        $validator = $this->validatorShortLink($request);
 
         if ($validator->fails()) {
             Event::fire(new LogEvent(trans('app.validator_fails'),$request->input('link'),$request->server));
@@ -76,6 +72,13 @@ class LinkController extends Controller
         //логирование
         Event::fire(new LogEvent(trans('app.response_link'),$request->input('link'),$request->server));
         return response()->json(['link' => self::getUrlLink($link->key)], 200);
+    }
+
+    protected function validatorShortLink($request)
+    {
+        return Validator::make($request->all(), [
+            'link' => 'required|correctness'
+        ]);
     }
 
     protected function getUrlLink($key) {
