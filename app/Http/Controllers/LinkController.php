@@ -143,7 +143,7 @@ class LinkController extends Controller
         } else {
             //логирование
             Event::fire(new LogEvent(trans('app.response_getLink_notFound'),$request->input('link'),$request->server));
-            return response()->json(['link' => array('validator.not_found')], 404);
+            return response()->json(['link' => array('validation.not_found')], 404);
         }
     }
 

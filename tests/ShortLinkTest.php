@@ -4,19 +4,9 @@ use App\Model\Link;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
-class LinkTest extends TestCase
+class ShortLinkTest extends TestCase
 {
     use DatabaseTransactions;
-
-    /**
-     * генерация случайного url
-     * @return string
-     */
-    public function generateUrl()
-    {
-        $faker = Faker\Factory::create();
-        return $faker->randomElement($array = array ('http://','https://')).$faker->domainName.'/'.str_random(10);
-    }
 
     /**
      * проверка создания ссылки
@@ -76,5 +66,4 @@ class LinkTest extends TestCase
             ])
             ->seeStatusCode(400);
     }
-
 }

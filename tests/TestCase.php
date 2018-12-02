@@ -11,4 +11,14 @@ abstract class TestCase extends Laravel\Lumen\Testing\TestCase
     {
         return require __DIR__.'/../bootstrap/app.php';
     }
+
+    /**
+     * генерация случайного url
+     * @return string
+     */
+    public function generateUrl()
+    {
+        $faker = Faker\Factory::create();
+        return $faker->randomElement($array = array ('http://','https://')).$faker->domainName.'/'.str_random(10);
+    }
 }
