@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\LogEvent;
+use App\Jobs\StatLinkJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Validator;
@@ -15,6 +16,8 @@ class LinkController extends Controller
     protected $link;
 
     /**
+     * сокращение ссылки
+     *
      * @OA\Post(
      *   path="/short_link",
      *   summary="Сокращение ссылки",
@@ -47,7 +50,6 @@ class LinkController extends Controller
      * )
      * )
      *
-     * сокращение ссылки
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -68,6 +70,10 @@ class LinkController extends Controller
         $link->key = $this->encodeId($link->id);
         $link->save();
 
+        //статистика
+        dispatch(new StatLinkJob($link,0));
+
+        //логирование
         Event::fire(new LogEvent(trans('app.response_link'),$request->input('link'),$request->server));
         return response()->json(['link' => self::getUrlLink($link->key)], 200);
     }

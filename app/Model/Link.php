@@ -2,7 +2,6 @@
 
 namespace App\Model;
 
-use App\Model\Link;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -25,13 +24,27 @@ class Link extends Model {
      *   type="string",
      *   description="код ссылки"
      * )
+     * @OA\Property(
+     *   property="stat_in",
+     *   type="integer",
+     *   default=0,
+     *   description="статистика обращений сокращения ссылки"
+     * )
+     * @OA\Property(
+     *   property="stat_out",
+     *   type="integer",
+     *   default=0,
+     *   description="статистика обращений получения ссылки"
+     * )
      */
 
     protected $table = 'links';
 
     protected $fillable = [
         'key',
-        'url'
+        'url',
+        'stat_in',
+        'stat_out',
     ];
 
 }
