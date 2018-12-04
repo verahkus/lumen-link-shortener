@@ -55,11 +55,6 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
-//$app->singleton('Illuminate\Contracts\Routing\ResponseFactory', function ($app)
-//{
-//    return new ResponseFactory($app['Illuminate\Contracts\View\Factory'], $app['Illuminate\Routing\Redirector']);
-//});
-
 /*
 |--------------------------------------------------------------------------
 | Register Middleware
@@ -94,11 +89,13 @@ $app->singleton(
 // $app->register(App\Providers\AuthServiceProvider::class);
  $app->register(App\Providers\EventServiceProvider::class);
 
+
 if ($app->environment() !== 'production') {
     $app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
     $app->register(\SwaggerLume\ServiceProvider::class);
 }
 
+$app->register(Illuminate\Redis\RedisServiceProvider::class);
 /*
 |--------------------------------------------------------------------------
 | Load The Application Routes
