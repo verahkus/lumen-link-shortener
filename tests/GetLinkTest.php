@@ -1,7 +1,5 @@
 <?php
 
-use App\Model\Link;
-use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class GetLinkTest extends TestCase

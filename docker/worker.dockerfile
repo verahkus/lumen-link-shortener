@@ -6,4 +6,6 @@ RUN apt-get update && apt-get install -y curl libmcrypt-dev \
     && docker-php-ext-enable imagick \
     && docker-php-ext-install mcrypt pdo_mysql
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY ./docker/supervisord.conf /etc/supervisord.conf
+
+ENTRYPOINT ["/usr/bin/supervisord", "-n", "-c",  "/etc/supervisord.conf"]

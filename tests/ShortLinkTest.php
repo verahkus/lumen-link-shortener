@@ -1,7 +1,6 @@
 <?php
 
 use App\Model\Link;
-use Laravel\Lumen\Testing\DatabaseMigrations;
 use Laravel\Lumen\Testing\DatabaseTransactions;
 
 class ShortLinkTest extends TestCase
@@ -14,6 +13,7 @@ class ShortLinkTest extends TestCase
     public function testCreateLinkFactory()
     {
         $links = factory(Link::class, 10)->create();
+        $this->updateKeyLinks();
         $this->assertEquals(10, $links->count());
     }
 
@@ -26,9 +26,10 @@ class ShortLinkTest extends TestCase
         $link = factory(Link::class)->create([
             'url' => $testLink,
         ]);
+        $this->updateKeyLinks();
         $response = $this->json('POST', '/short_link', ['link' => $testLink])
             ->seeJson([
-                'link' => config('app.site_url').$link->key,
+                'link' => config('app.site_url').Link::find($link->id)->key,
             ])
             ->seeStatusCode(200);
     }
