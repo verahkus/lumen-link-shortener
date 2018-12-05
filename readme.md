@@ -26,8 +26,8 @@ nginx+php-fpm+mysql+redis+worker(supervisor)
 * docker-compose exec app php artisan migrate
 
 #### Documentation
-./api/documentation  
-(storage/api-docs/api-docs.json)
+/api/documentation (storage/api-docs/api-docs.json)  
+пример: http://127.0.0.1:7777/api/documentation
 
 **Responses** - ответы api
 * validation.required - ссылка обязательна
