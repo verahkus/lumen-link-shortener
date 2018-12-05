@@ -14,12 +14,15 @@ nginx+php-fpm+mysql+redis+worker(supervisor)
 **.env**
 * APP_URL=http://127.0.0.1:7777/ - адрес сервиса
 * APP_PORT=7777 - порт
+* DB_PORT_E=33061 - порт для доступа к mysql
 
 #### Installation
 * git clone https://github.com/verahkus/lumen-link-shortener.git
 * composer install
 * cp .env.example .env
-* docker-compose up -d 
+* docker-compose up -d --build --force-recreate
+* chmod 777 ./storage/ -R
+* php artisan swagger-lume:generate
 * docker-compose exec app php artisan migrate
 
 #### Documentation
@@ -38,7 +41,12 @@ nginx+php-fpm+mysql+redis+worker(supervisor)
 * app.response_shortLink - сокращение ссылки
 * app.response_getLink - получение ссылки
 
-**docker-compose**
+**Logs**
+* App - storage/logs
+* Nginx - docker/nginx
+* Supervisor - docker/supervisor
+
+**Docker-compose**
 * docker-compose exec app ./vendor/bin/phpunit - запустить тесты
 * docker-compose exec app php artisan migrate:refresh - пересобрать базу
 * docker-compose up --build --force-recreate - пересобрать контейнеры

@@ -50,7 +50,7 @@ services:
       - MYSQL_PASSWORD=${DB_PASSWORD}
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     ports:
-        - "33061:3306"
+        - "${DB_PORT_E}:3306"
 
   redis:
     restart: always
